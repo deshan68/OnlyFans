@@ -8,20 +8,27 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "expo-router";
 import users from "../../assets/data/users";
 import UserProfileHeader from "../../src/components/UserProfileHeader";
 import posts from "../../assets/data/posts";
 import Posts from "../../src/components/Posts";
 import { Entypo } from "@expo/vector-icons";
+import { DataStore } from "aws-amplify";
+import { User } from "../../src/models";
 
 const ProfilePage = () => {
   const [isSubscribed, setIsSubscribed] = useState(true);
+  const [user, setUser] = useState([]);
 
   const { id } = useSearchParams();
 
-  const user = users.find((user) => user.id === id);
+  // const user = users.find((user) => user.id === id);
+
+  useEffect(() => {
+    DataStore.query(User, id).then(setUser);
+  }, [user]);
 
   if (!user) {
     return <Text>user does not exist</Text>;
