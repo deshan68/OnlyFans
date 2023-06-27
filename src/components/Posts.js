@@ -4,15 +4,25 @@ import { Image } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
-import { DataStore } from "aws-amplify";
+import { DataStore, Storage } from "aws-amplify";
 import { User } from "../models";
+import { concat } from "react-native-reanimated";
 
 const Posts = ({ post }) => {
   const [user, setUser] = useState([]);
+  const [imageURI, setImageURI] = useState();
 
   useEffect(() => {
     DataStore.query(User, post.userID).then(setUser);
-  });
+  }, []);
+
+  useEffect(() => {
+    if (post.image) {
+      Storage.get(post.image).then(setImageURI);
+    }
+  }, [post.image]);
+
+  console.log(imageURI);
   return (
     <View>
       <View style={{ flexDirection: "row", alignItems: "center", padding: 5 }}>
@@ -46,7 +56,7 @@ const Posts = ({ post }) => {
 
       <Text style={{ margin: 10, lineHeight: 18 }}>{post.text}</Text>
       {post.image && (
-        <Image src={post.image} style={{ width: "100%", aspectRatio: 1 }} />
+        <Image src={imageURI} style={{ width: "100%", aspectRatio: 1 }} />
       )}
 
       <View style={{ margin: 10, flexDirection: "row" }}>

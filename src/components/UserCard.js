@@ -13,10 +13,7 @@ export default function UserCard({ user }) {
   return (
     <Link href={`/user/${user.id}`} asChild>
       <Pressable>
-        <ImageBackground
-          source={{ uri: user.coverImage }}
-          style={styles.userCards}
-        >
+        <ImageBackground source={{ uri: user.avatar }} style={styles.userCards}>
           <View style={styles.overLay} />
           {/* image */}
           <Image src={user.avatar} style={styles.userImage} />

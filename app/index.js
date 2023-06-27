@@ -7,6 +7,7 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
+  StatusBar,
 } from "react-native";
 import UserCard from "../src/components/UserCard";
 import { Link } from "expo-router";
@@ -26,16 +27,45 @@ export default function Page() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Link href={"/NewPost"}>
-        <Text>New Post</Text>
-      </Link>
-      <Text style={{ marginVertical: 20 }} onPress={() => signOut()}>
-        Sign out
-      </Text>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-around",
+        }}
+      >
+        <Link
+          href={"/NewPost"}
+          style={{
+            backgroundColor: "royalblue",
+            alignSelf: "center",
+            padding: 10,
+          }}
+        >
+          <Text style={{ color: "white", fontWeight: "bold" }}>New Post</Text>
+        </Link>
+        <View
+          style={{
+            borderColor: "royalblue",
+            borderWidth: 1,
+            alignSelf: "center",
+            padding: 10,
+            marginVertical: 10,
+          }}
+        >
+          <Text
+            style={{ color: "royalblue", fontWeight: "bold" }}
+            onPress={() => signOut()}
+          >
+            Sign out
+          </Text>
+        </View>
+      </View>
       <FlatList
         data={users}
         renderItem={({ item }) => <UserCard user={item} />}
       />
+      <StatusBar barStyle={"dark-content"} />
     </SafeAreaView>
   );
 }
@@ -44,5 +74,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    width: "100%",
   },
 });

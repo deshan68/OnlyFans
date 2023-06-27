@@ -17,7 +17,7 @@ const UserProfileHeader = ({ user, isSubscribed, setIsSubscribed }) => {
 
   return (
     <View>
-      <ImageBackground source={{ uri: user.coverImage }} style={styles.cover}>
+      <ImageBackground source={{ uri: user.avatar }} style={styles.cover}>
         <View style={styles.overLay} />
         <SafeAreaView
           style={{
