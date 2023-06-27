@@ -16,11 +16,12 @@ import posts from "../../assets/data/posts";
 import Posts from "../../src/components/Posts";
 import { Entypo } from "@expo/vector-icons";
 import { DataStore } from "aws-amplify";
-import { User } from "../../src/models";
+import { User, Post as PostModel } from "../../src/models";
 
 const ProfilePage = () => {
   const [isSubscribed, setIsSubscribed] = useState(true);
   const [user, setUser] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   const { id } = useSearchParams();
 
@@ -28,11 +29,14 @@ const ProfilePage = () => {
 
   useEffect(() => {
     DataStore.query(User, id).then(setUser);
-  }, [user]);
+    DataStore.query(PostModel, (post) => post.userID.eq(id)).then(setPosts);
+  }, [id]);
 
   if (!user) {
     return <Text>user does not exist</Text>;
   }
+
+  console.log(posts);
 
   if (!isSubscribed) {
     return (

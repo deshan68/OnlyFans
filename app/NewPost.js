@@ -13,12 +13,17 @@ import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
+import { DataStore } from "aws-amplify";
+import { useAuthenticator } from "@aws-amplify/ui-react-native";
+import { Post } from "../src/models";
 
 const NewPost = () => {
   const [text, setText] = useState("");
   const [image, setImage] = useState("");
 
   const router = useRouter();
+
+  const { user } = useAuthenticator();
 
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -32,6 +37,12 @@ const NewPost = () => {
     } else {
       alert("You did not select any image.");
     }
+  };
+
+  const onPost = async () => {
+    await DataStore.save(
+      new Post({ text, likes: 0, userID: user.attributes.sub })
+    );
   };
 
   return (
@@ -59,7 +70,7 @@ const NewPost = () => {
         />
       </View>
       {image && <Image src={image} style={{ width: "100%", aspectRatio: 1 }} />}
-      <Button title="Post" />
+      <Button title="Post" onPress={() => onPost()} />
     </SafeAreaView>
   );
 };

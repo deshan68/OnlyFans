@@ -1,16 +1,23 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
+import { DataStore } from "aws-amplify";
+import { User } from "../models";
 
 const Posts = ({ post }) => {
+  const [user, setUser] = useState([]);
+
+  useEffect(() => {
+    DataStore.query(User, post.userID).then(setUser);
+  });
   return (
     <View>
       <View style={{ flexDirection: "row", alignItems: "center", padding: 5 }}>
         <Image
-          src={post.User.avatar}
+          src={user?.avatar}
           style={{
             width: 50,
             aspectRatio: 1,
@@ -20,9 +27,9 @@ const Posts = ({ post }) => {
         />
         <View>
           <Text style={{ fontWeight: "600", fontSize: 17, marginBottom: 3 }}>
-            {post.User.name}
+            {user?.name}
           </Text>
-          <Text style={{ color: "gray" }}>@{post.User.handle}</Text>
+          <Text style={{ color: "gray" }}>@{user?.handle}</Text>
         </View>
 
         <View
@@ -38,7 +45,9 @@ const Posts = ({ post }) => {
       </View>
 
       <Text style={{ margin: 10, lineHeight: 18 }}>{post.text}</Text>
-      <Image src={post.image} style={{ width: "100%", aspectRatio: 1 }} />
+      {post.image && (
+        <Image src={post.image} style={{ width: "100%", aspectRatio: 1 }} />
+      )}
 
       <View style={{ margin: 10, flexDirection: "row" }}>
         <AntDesign
